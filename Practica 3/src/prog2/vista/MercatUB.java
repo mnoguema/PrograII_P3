@@ -4,7 +4,9 @@
  */
 package prog2.vista;
 
+import java.io.IOException;
 import java.util.Scanner;
+import prog2.adaptador.Adaptador;
 
 /**
  *
@@ -14,7 +16,7 @@ public class MercatUB {
 
     private Adaptador adaptador = new Adaptador();
 
-    public void gestioMercatUB() {
+    public void gestioMercatUB() throws IOException {
         Scanner sc = new Scanner(System.in);
         gestioMenu(sc);
     }
@@ -28,12 +30,12 @@ public class MercatUB {
         M_Opcio_6_Sortir
     };
     private static final String[] descMenu = {
-        "Dona pas a un submenú que permet gestionar la informació relacionada amb els articles.",
-        "Mostra un submenú que permet gestionar els clients.",
-        "Visualitza un submenú per gestionar les comandes.",
-        "Guarda les dades de l'aplicació.",
-        "Carrega les dades de l'aplicació.",
-        "Surt de l'aplicació."
+        "Gestionar articles",
+        "Gestionar clients",
+        "Gestionar comandes",
+        "Guardar Dades",
+        "Carregar Dades",
+        "Sortir"
     };
 
     private static enum OpcionsMenuArticles {
@@ -76,7 +78,7 @@ public class MercatUB {
         "Torna al menú principal."
     };
 
-    public void gestioMenu(Scanner sc) {
+    public void gestioMenu(Scanner sc) throws IOException {
         Menu<OpcionsMenu> menuMercatUB = new Menu<>("Menu Mercat UB ", OpcionsMenu.values());
         menuMercatUB.setDescripcions(descMenu);
         OpcionsMenu opcioMenu;
@@ -96,10 +98,12 @@ public class MercatUB {
                     gestioComandes(sc);
                     break;
                 case M_Opcio_4_GuardarDades:
+                    sc = new Scanner(System.in);
+
                     System.out.println("Amb quin nom ho vols guardar?");
                     String nomFitxer = sc.nextLine();
                     try {
-                        adaptador.guarda(nomFitxer);
+                        adaptador.guardaDades(nomFitxer);
                     } catch (MercatException ex) {
                         System.out.println(ex.getMessage());
                     }
@@ -111,7 +115,7 @@ public class MercatUB {
                     String srcFile = sc.nextLine();
 
                     try {
-                        adaptador.recupera(srcFile);
+                        adaptador.recuperaDades(srcFile);
                     } catch (MercatException ex) {
                         System.out.println(ex.getMessage());
 
@@ -144,7 +148,7 @@ public class MercatUB {
                     boolean admetUrgent = sc.nextBoolean();
 
                     try {
-                        adaptador.afegirArticle(id, nom, preu, temps, admetUrgent);
+                        adaptador.afegirArticle(id, nom, preu, admetUrgent, temps);
                     } catch (MercatException mercatException) {
                         System.out.println(mercatException.getMessage());
                     }
@@ -202,8 +206,10 @@ public class MercatUB {
             switch (opcioMenu) {
                 case M_OPCIO_1_AfegirComanda:
                     System.out.println("Posició de l'article a la llista: ");
+                    System.out.println(adaptador.llistarArticles());
                     int articlePos = sc.nextInt();
                     System.out.println("Posició del client a la llista: ");
+                    System.out.println(adaptador.llistarClients());
                     int clientPos = sc.nextInt();
                     System.out.println("Quantitat a comprar: ");
                     int quantitat = sc.nextInt();
@@ -219,6 +225,7 @@ public class MercatUB {
 
                 case M_OPCIO_2_CancelarComanda:
                     System.out.println("Posició de la comanda a la llista: ");
+                    System.out.println(adaptador.llistarComandes("totes"));
                     int position = sc.nextInt();
 
                     try {

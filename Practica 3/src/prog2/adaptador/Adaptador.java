@@ -26,13 +26,12 @@ import prog2.vista.MercatException;
 public class Adaptador {
 
     private Dades dades = new Dades();
-    
+
     public void guardaDades(String camiDesti) throws MercatException, FileNotFoundException, IOException {
-        File fitxer = new File(camiDesti);
         try {
-            FileOutputStream fout = new FileOutputStream(fitxer);
+            FileOutputStream fout = new FileOutputStream(camiDesti);
             ObjectOutputStream oos = new ObjectOutputStream(fout);
-            oos.writeObject(this);
+            oos.writeObject(this.dades);
             oos.close();
             fout.close();
         } catch (FileNotFoundException ex) {
@@ -41,7 +40,8 @@ public class Adaptador {
             throw new MercatException("IO error");
         }
     }
-    public void carregaDades(String camiOrigen) throws MercatException, FileNotFoundException, IOException {
+
+    public void recuperaDades(String camiOrigen) throws MercatException, FileNotFoundException, IOException {
         if (camiOrigen == null) {
             throw new MercatException("Cami al fitxer no valid");
         }
@@ -73,13 +73,15 @@ public class Adaptador {
     }
 
     public ArrayList<String> llistarArticles() {
-        ArrayList<String> llistaArticles = new ArrayList<>();
+        ArrayList<String> llista = new ArrayList<>();
         Iterator<Article> it = dades.recuperaArticles().iterator();
+        int i = 1;
         while (it.hasNext()) {
-            llistaArticles.add(it.next().toString());
+            llista.add("[" + i + "]" + it.next().toString());
+            i++;
         }
+        return llista;
 
-        return llistaArticles;
     }
 
     public void afegirClient(String email, String nom, String adreca, boolean esPremium) throws MercatException {
@@ -87,17 +89,30 @@ public class Adaptador {
     }
 
     public ArrayList<String> llistarClients() {
-        ArrayList<String> llistaClients = new ArrayList<>();
+        ArrayList<String> llista = new ArrayList<>();
         Iterator<Client> it = dades.recuperaClients().iterator();
+        int i = 1;
         while (it.hasNext()) {
-            llistaClients.add(it.next().toString());
+            llista.add("[" + i + "]" + it.next().toString());
+            i++;
         }
-
-        return llistaClients;
+        return llista;
     }
 
+    /*    public String llistarClients() {
+        String frase = "";
+        int i = 1;
+        Iterator<Client> it = dades.recuperaClients().iterator();
+        while (it.hasNext()) {
+          frase += "[" + i + "]";
+            frase += it.next().toString();
+            i++;
+        }
+
+        return frase;
+    }*/
     public void afegirComanda(int articlePos, int clientPos, int quantitat, boolean esUrgent) throws MercatException {
-        dades.afegirComanda(articlePos, clientPos, quantitat, esUrgent);
+        dades.afegirComanda(articlePos + 1, clientPos + 1, quantitat, esUrgent);
     }
 
     public void cancelarComanda(int position) throws MercatException {
@@ -105,12 +120,15 @@ public class Adaptador {
     }
 
     public ArrayList<String> llistarComandes(String tipus) {
-        ArrayList<String> llistaComandes = new ArrayList<>();
+        ArrayList<String> llista = new ArrayList<>();
         Iterator<Comanda> it = tipus.equals("totes") ? dades.recuperaComandes().iterator() : dades.recuperaComandesCancelades().iterator();
+        int i = 1;
         while (it.hasNext()) {
-            llistaComandes.add(it.next().toString());
-
+            llista.add("[" + i + "]" + it.next().toString());
+            i++;
         }
-        return llistaComandes;
+        return llista;
+
     }
+
 }

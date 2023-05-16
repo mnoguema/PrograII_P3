@@ -19,7 +19,7 @@ public class LlistaClients extends Llista<Client> implements Serializable {
         Iterator<Client> it = this.llista.iterator();
         while (it.hasNext()) {
             if (it.next().getCorreu().equals(client.getCorreu())) {
-                throw new MercatException("No es poden afegir dos articles amb el mateix identificador");
+                throw new MercatException("No es poden afegir dos clients amb el mateix correu");
             }
         }
         super.afegir(client);

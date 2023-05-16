@@ -26,7 +26,7 @@ public abstract class Comanda implements Serializable {
     private boolean enviada;
     private boolean rebuda;
     private boolean cancelada;
-    
+
     public Comanda(Client client, Article article, int quantitat, Date data) {
         this.client = client;
         this.article = article;
@@ -169,6 +169,6 @@ public abstract class Comanda implements Serializable {
                 + ", Rebuda=" + isRebuda()
                 + ", Cancel·lada" + isCancelada()
                 + ", Preu Articles=" + calcPreu()
-                + ", Preu Enviament=" + preuEnviament();
+                + ", Preu Enviament=" + preuEnviament() + "\n";
     }
 }

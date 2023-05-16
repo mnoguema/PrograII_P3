@@ -77,6 +77,6 @@ public abstract class Client implements Serializable {
                 + ", Nom =" + getNom()
                 + ", Adreça= " + getAdreca()
                 + ", Descompte Enviament=" + descompteEnv()
-                + ", Mensualitat=" + calcMensual();
+                + ", Mensualitat=" + calcMensual() + "\n";
     }
 }

@@ -4,6 +4,7 @@
  */
 package prog2.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import prog2.vista.MercatException;
@@ -13,7 +14,7 @@ import java.util.Date;
  *
  * @author Marina
  */
-public class Dades implements InDades {
+public class Dades implements InDades, Serializable {
 
     private LlistaArticles llistaArticles = new LlistaArticles();
     private LlistaClients llistaClients = new LlistaClients();
